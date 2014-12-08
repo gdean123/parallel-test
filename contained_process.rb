@@ -1,11 +1,11 @@
 require 'pty'
 require 'thread'
 
-class ContainedThread
+class ContainedProcess
   attr_reader :succeeded
 
   def self.start(command)
-    contained_thread = ContainedThread.new
+    contained_thread = ContainedProcess.new
     contained_thread.start(command)
     contained_thread
   end

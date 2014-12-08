@@ -1,1 +1,1 @@
-(1...4).each {|n| puts "Java test #{n}"; sleep 1}
+(1..5).each {|n| puts "Java test #{n}"; sleep 1}

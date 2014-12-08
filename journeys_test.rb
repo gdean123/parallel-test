@@ -1,1 +1,1 @@
-(1...2).each {|n| puts "Journey test #{n}"; sleep 1}
+(1..8).each {|n| puts "Journey test #{n}"; sleep 1}
