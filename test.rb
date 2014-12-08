@@ -4,6 +4,12 @@ require 'thread'
 class ContainedThread
   attr_reader :succeeded
 
+  def self.start(command)
+    contained_thread = ContainedThread.new
+    contained_thread.start(command)
+    contained_thread
+  end
+
   def initialize
     @output = Queue.new
   end
@@ -36,8 +42,7 @@ class ContainedThread
   end
 end
 
-journey_test_thread = ContainedThread.new
-journey_test_thread.start('ruby journeys_test.rb')
+journey_test_thread = ContainedThread.start('ruby journeys_test.rb')
 
 java_tests_passed = system 'ruby java_test.rb'
 
