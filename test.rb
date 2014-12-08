@@ -6,16 +6,13 @@ class ContainedThread
 
   def initialize
     @output = Queue.new
-    @succeeded = false
   end
 
   def start(command)
     @thread = Thread.start do
       PTY.spawn(command) do |stdout, _, pid|
-        stdout.each do |line|
-          @output.enq(line)
-        end
-        @succeeded = (Process.wait2(pid)[1].exitstatus == 0)
+        enqueue_output(stdout)
+        @succeeded = exit_success?(pid)
       end
     end
   end
@@ -24,6 +21,18 @@ class ContainedThread
     while @thread.alive? || !@output.empty? do
       puts @output.pop unless @output.empty?
     end
+  end
+
+  private
+
+  def enqueue_output(stdout)
+    stdout.each do |line|
+      @output.enq(line)
+    end
+  end
+
+  def exit_success?(pid)
+    Process.wait2(pid)[1].exitstatus == 0
   end
 end
 
