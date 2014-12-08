@@ -1,9 +1,17 @@
 require_relative 'contained_thread'
 
-journey_tests = ContainedThread.start('ruby journeys_test.rb')
-java_tests = ContainedThread.start('ruby java_test.rb')
+commands = ['ruby journeys_test.rb', 'ruby java_test.rb']
 
-java_tests.blocking_print
-journey_tests.blocking_print
+threads = commands.map do |command|
+  ContainedThread.start(command)
+end
 
-exit journey_tests.succeeded && java_tests.succeeded
+threads.each do |command|
+  command.blocking_print
+end
+
+all_succeeded = threads.reduce(true) do |all_succeeded, command|
+  all_succeeded && command.succeeded
+end
+
+exit all_succeeded
